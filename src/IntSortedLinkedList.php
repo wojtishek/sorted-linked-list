@@ -20,4 +20,9 @@ final class IntSortedLinkedList extends AbstractSortedLinkedList
     {
         $this->insertSorted($value);
     }
+
+    public function contains(int $value): bool
+    {
+        return $this->containsValue($value);
+    }
 }

@@ -263,4 +263,52 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
         self::assertSame([$sample[0], $sample[4], $sample[4]], $list->toArray());
         self::assertSame(3, $list->count());
     }
+
+    public function testContainsReturnsTrueForExistingValue(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        foreach ($this->ascendingSample() as $value) {
+            self::assertTrue($list->contains($value), "expected list to contain $value");
+        }
+    }
+
+    public function testContainsReturnsFalseForMissingValueSmallerThanAll(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        self::assertFalse($list->contains($this->valueSmallerThanAll()));
+    }
+
+    public function testContainsReturnsFalseForMissingValueLargerThanAll(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        self::assertFalse($list->contains($this->valueLargerThanAll()));
+    }
+
+    public function testContainsReturnsFalseForMissingValueInBetween(): void
+    {
+        // ascendingSample omits valueInBetween() (e.g. 25 missing from [1,2,3,4,5])
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        self::assertFalse($list->contains($this->valueInBetween()));
+    }
+
+    public function testContainsReturnsFalseOnEmptyList(): void
+    {
+        self::assertFalse($this->createEmpty()->contains($this->ascendingSample()[0]));
+    }
 }

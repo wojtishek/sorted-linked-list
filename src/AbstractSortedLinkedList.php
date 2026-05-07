@@ -18,6 +18,7 @@ use Studio83\SortedLinkedList\Internal\Node;
  * narrow an int|string parameter to int.
  *
  * @method void add(int|string $value)
+ * @method bool contains(int|string $value)
  *
  * @implements \IteratorAggregate<int, int|string>
  */
@@ -84,6 +85,20 @@ abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregat
         }
 
         ++$this->count;
+    }
+
+    /**
+     * Check whether the list contains a value (uses === for equality after
+     * locating the candidate by sort order; benefits from early exit).
+     */
+    final protected function containsValue(int|string $value): bool
+    {
+        $current = $this->head;
+        while (null !== $current && ($current->value <=> $value) < 0) {
+            $current = $current->next;
+        }
+
+        return null !== $current && $current->value === $value;
     }
 
     /**
