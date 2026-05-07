@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Studio83\SortedLinkedList\Tests;
 
 use Studio83\SortedLinkedList\AbstractSortedLinkedList;
+use Studio83\SortedLinkedList\Exception\InvalidValueException;
 use Studio83\SortedLinkedList\IntSortedLinkedList;
 
 /**
@@ -52,5 +53,45 @@ final class IntSortedLinkedListTest extends AbstractSortedLinkedListTestCase
     protected function valueInBetween(): int|string
     {
         return 25;
+    }
+
+    /**
+     * @param AbstractSortedLinkedListTestCase<IntSortedLinkedList> $testCase
+     * @param array<array-key, mixed>                               $values
+     */
+    protected static function fromArrayHelper(AbstractSortedLinkedListTestCase $testCase, array $values): AbstractSortedLinkedList
+    {
+        return IntSortedLinkedList::fromArray($values);
+    }
+
+    public function testFromArrayWithIntValues(): void
+    {
+        $list = IntSortedLinkedList::fromArray([3, 1, 2]);
+        self::assertSame([1, 2, 3], $list->toArray());
+    }
+
+    public function testFromArrayWithNonIntValueThrows(): void
+    {
+        $this->expectException(InvalidValueException::class);
+        $this->expectExceptionMessageMatches('/index 1/');
+        IntSortedLinkedList::fromArray([1, 'two', 3]);
+    }
+
+    public function testFromArrayWithFloatValueThrows(): void
+    {
+        $this->expectException(InvalidValueException::class);
+        IntSortedLinkedList::fromArray([1, 2.5, 3]);
+    }
+
+    public function testFromArrayWithBoolValueThrows(): void
+    {
+        $this->expectException(InvalidValueException::class);
+        IntSortedLinkedList::fromArray([1, true, 3]);
+    }
+
+    public function testFromArrayWithNullValueThrows(): void
+    {
+        $this->expectException(InvalidValueException::class);
+        IntSortedLinkedList::fromArray([1, null, 3]);
     }
 }

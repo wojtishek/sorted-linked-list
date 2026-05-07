@@ -481,4 +481,43 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
             ++$expectedIndex;
         }
     }
+
+    public function testFromArrayWithEmptyArrayProducesEmptyList(): void
+    {
+        $list = static::fromArrayHelper($this, []);
+        self::assertTrue($list->isEmpty());
+        self::assertSame(0, $list->count());
+    }
+
+    public function testFromArraySortsValues(): void
+    {
+        $list = static::fromArrayHelper($this, $this->unsortedSample());
+        self::assertSame($this->ascendingSample(), $list->toArray());
+    }
+
+    public function testFromArrayIgnoresStringKeys(): void
+    {
+        $sample = $this->ascendingSample();
+        $assoc = ['a' => $sample[2], 'b' => $sample[0], 'c' => $sample[4]];
+
+        $list = static::fromArrayHelper($this, $assoc);
+        self::assertSame([$sample[0], $sample[2], $sample[4]], $list->toArray());
+    }
+
+    public function testFromArrayAllowsDuplicates(): void
+    {
+        $sample = $this->ascendingSample();
+        $list = static::fromArrayHelper($this, [$sample[1], $sample[1], $sample[3]]);
+        self::assertSame([$sample[1], $sample[1], $sample[3]], $list->toArray());
+        self::assertSame(3, $list->count());
+    }
+
+    /**
+     * Concrete test classes route through this so abstract tests can build
+     * a list via fromArray without knowing the concrete class name.
+     *
+     * @param self<AbstractSortedLinkedList> $testCase
+     * @param array<array-key, mixed>        $values
+     */
+    abstract protected static function fromArrayHelper(self $testCase, array $values): AbstractSortedLinkedList;
 }
