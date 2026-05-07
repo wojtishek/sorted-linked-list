@@ -42,6 +42,50 @@ abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregat
         $this->count = 0;
     }
 
+    abstract public function add(int|string $value): void;
+
+    /**
+     * Insert a value at its sorted position.
+     *
+     * Stable: equal values are placed AFTER existing equals (insertion order
+     * is preserved among equal elements).
+     */
+    final protected function insertSorted(int|string $value): void
+    {
+        $newNode = new Node($value);
+
+        if (null === $this->head) {
+            $this->head = $newNode;
+            $this->tail = $newNode;
+            $this->count = 1;
+
+            return;
+        }
+
+        if (($value <=> $this->head->value) < 0) {
+            $newNode->next = $this->head;
+            $this->head = $newNode;
+            ++$this->count;
+
+            return;
+        }
+
+        // Walk past all values <= $value so the new node lands AFTER existing equals (stable).
+        $current = $this->head;
+        while (null !== $current->next && ($current->next->value <=> $value) <= 0) {
+            $current = $current->next;
+        }
+
+        $newNode->next = $current->next;
+        $current->next = $newNode;
+
+        if (null === $newNode->next) {
+            $this->tail = $newNode;
+        }
+
+        ++$this->count;
+    }
+
     /**
      * @return \Generator<int, int|string>
      */
