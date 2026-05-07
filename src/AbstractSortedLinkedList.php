@@ -197,4 +197,31 @@ abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregat
 
         return $this->tail->value;
     }
+
+    /**
+     * Deep-copy the node chain so a cloned list is fully independent
+     * of its source. Without this, PHP's default shallow clone would
+     * share Node instances — mutating either list would corrupt the other
+     * because list operations re-link `Node::$next`.
+     */
+    public function __clone(): void
+    {
+        if (null === $this->head) {
+            return;
+        }
+
+        $newHead = new Node($this->head->value);
+        $newTail = $newHead;
+        $current = $this->head->next;
+
+        while (null !== $current) {
+            $newTail->next = new Node($current->value);
+            $newTail = $newTail->next;
+            $current = $current->next;
+        }
+
+        $this->head = $newHead;
+        $this->tail = $newTail;
+        // $count is an int — already copied by value by PHP.
+    }
 }
