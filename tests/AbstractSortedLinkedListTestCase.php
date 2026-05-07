@@ -428,4 +428,57 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
         self::assertSame(0, $list->count());
         self::assertSame([], $list->toArray());
     }
+
+    public function testJsonSerializeProducesArray(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->unsortedSample() as $value) {
+            $list->add($value);
+        }
+        self::assertSame($this->ascendingSample(), $list->jsonSerialize());
+    }
+
+    public function testJsonEncodeProducesArrayNotObjectForEmptyList(): void
+    {
+        $encoded = json_encode($this->createEmpty());
+        self::assertSame('[]', $encoded);
+    }
+
+    public function testJsonEncodeProducesArrayForPopulatedList(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        $encoded = json_encode($list);
+        self::assertSame(json_encode($this->ascendingSample()), $encoded);
+    }
+
+    public function testToArrayReturnsZeroIndexedList(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->unsortedSample() as $value) {
+            $list->add($value);
+        }
+
+        $array = $list->toArray();
+        self::assertSame(array_values($array), $array);
+        self::assertSame(0, array_key_first($array));
+        self::assertSame(\count($array) - 1, array_key_last($array));
+    }
+
+    public function testIterationYieldsZeroIndexedKeys(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        $expectedIndex = 0;
+        foreach ($list as $key => $value) {
+            self::assertSame($expectedIndex, $key);
+            ++$expectedIndex;
+        }
+    }
 }
