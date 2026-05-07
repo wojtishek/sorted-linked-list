@@ -16,7 +16,7 @@ final class IntSortedLinkedList extends AbstractSortedLinkedList
         }
     }
 
-    public function add(int|string $value): void
+    public function add(int $value): void
     {
         $this->insertSorted($value);
     }

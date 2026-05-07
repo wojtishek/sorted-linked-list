@@ -7,8 +7,12 @@ namespace Studio83\SortedLinkedList\Tests;
 use Studio83\SortedLinkedList\AbstractSortedLinkedList;
 use Studio83\SortedLinkedList\IntSortedLinkedList;
 
+/**
+ * @extends AbstractSortedLinkedListTestCase<IntSortedLinkedList>
+ */
 final class IntSortedLinkedListTest extends AbstractSortedLinkedListTestCase
 {
+    /** @return IntSortedLinkedList */
     protected function createEmpty(): AbstractSortedLinkedList
     {
         return new IntSortedLinkedList();

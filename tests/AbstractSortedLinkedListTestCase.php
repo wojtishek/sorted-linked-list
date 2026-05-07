@@ -8,8 +8,12 @@ use PHPUnit\Framework\TestCase;
 use Studio83\SortedLinkedList\AbstractSortedLinkedList;
 use Studio83\SortedLinkedList\Exception\EmptyListException;
 
+/**
+ * @template T of AbstractSortedLinkedList
+ */
 abstract class AbstractSortedLinkedListTestCase extends TestCase
 {
+    /** @return T */
     abstract protected function createEmpty(): AbstractSortedLinkedList;
 
     /**

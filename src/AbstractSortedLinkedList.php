@@ -17,6 +17,8 @@ use Studio83\SortedLinkedList\Internal\Node;
  * The split is forced by PHP's contravariance rules: a subclass cannot
  * narrow an int|string parameter to int.
  *
+ * @method void add(int|string $value)
+ *
  * @implements \IteratorAggregate<int, int|string>
  */
 abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregate, \JsonSerializable
@@ -41,8 +43,6 @@ abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregat
         $this->tail = null;
         $this->count = 0;
     }
-
-    abstract public function add(int|string $value): void;
 
     /**
      * Insert a value at its sorted position.
