@@ -311,4 +311,121 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
     {
         self::assertFalse($this->createEmpty()->contains($this->ascendingSample()[0]));
     }
+
+    public function testRemoveOnEmptyListReturnsFalse(): void
+    {
+        $list = $this->createEmpty();
+        self::assertFalse($list->remove($this->ascendingSample()[0]));
+        self::assertSame(0, $list->count());
+    }
+
+    public function testRemoveNonExistentValueReturnsFalse(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        self::assertFalse($list->remove($this->valueLargerThanAll()));
+        self::assertFalse($list->remove($this->valueSmallerThanAll()));
+        self::assertFalse($list->remove($this->valueInBetween()));
+        self::assertSame($this->ascendingSample(), $list->toArray());
+    }
+
+    public function testRemoveSingleElementEmptiesTheList(): void
+    {
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+        $list->add($sample[0]);
+
+        self::assertTrue($list->remove($sample[0]));
+        self::assertTrue($list->isEmpty());
+        self::assertSame(0, $list->count());
+
+        // first()/last() must throw again after the list returns to empty state.
+        $exceptionsThrown = 0;
+        try {
+            $list->first();
+        } catch (EmptyListException) {
+            ++$exceptionsThrown;
+        }
+        try {
+            $list->last();
+        } catch (EmptyListException) {
+            ++$exceptionsThrown;
+        }
+        self::assertSame(2, $exceptionsThrown);
+    }
+
+    public function testRemoveHead(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+        $sample = $this->ascendingSample();
+
+        self::assertTrue($list->remove($sample[0]));
+        self::assertSame($sample[1], $list->first());
+        self::assertSame(\array_slice($sample, 1), $list->toArray());
+        self::assertSame(\count($sample) - 1, $list->count());
+    }
+
+    public function testRemoveTailUpdatesTailPointer(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+        $sample = $this->ascendingSample();
+
+        self::assertTrue($list->remove($sample[\count($sample) - 1]));
+        self::assertSame($sample[\count($sample) - 2], $list->last());
+        self::assertSame(\array_slice($sample, 0, \count($sample) - 1), $list->toArray());
+    }
+
+    public function testRemoveMiddle(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+        $sample = $this->ascendingSample();
+        $middle = $sample[(int) (\count($sample) / 2)];
+
+        self::assertTrue($list->remove($middle));
+        self::assertNotContains($middle, $list->toArray());
+        self::assertSame(\count($sample) - 1, $list->count());
+    }
+
+    public function testRemoveDuplicateRemovesOnlyOneOccurrence(): void
+    {
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+        $list->add($sample[2]);
+        $list->add($sample[2]);
+        $list->add($sample[2]);
+
+        self::assertTrue($list->remove($sample[2]));
+        self::assertSame(2, $list->count());
+        self::assertSame([$sample[2], $sample[2]], $list->toArray());
+
+        self::assertTrue($list->remove($sample[2]));
+        self::assertTrue($list->remove($sample[2]));
+        self::assertFalse($list->remove($sample[2]));
+        self::assertTrue($list->isEmpty());
+    }
+
+    public function testClearOnNonEmptyList(): void
+    {
+        $list = $this->createEmpty();
+        foreach ($this->ascendingSample() as $value) {
+            $list->add($value);
+        }
+
+        $list->clear();
+        self::assertTrue($list->isEmpty());
+        self::assertSame(0, $list->count());
+        self::assertSame([], $list->toArray());
+    }
 }

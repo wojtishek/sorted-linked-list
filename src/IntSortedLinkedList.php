@@ -25,4 +25,9 @@ final class IntSortedLinkedList extends AbstractSortedLinkedList
     {
         return $this->containsValue($value);
     }
+
+    public function remove(int $value): bool
+    {
+        return $this->removeFirst($value);
+    }
 }

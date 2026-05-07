@@ -19,6 +19,7 @@ use Studio83\SortedLinkedList\Internal\Node;
  *
  * @method void add(int|string $value)
  * @method bool contains(int|string $value)
+ * @method bool remove(int|string $value)
  *
  * @implements \IteratorAggregate<int, int|string>
  */
@@ -99,6 +100,47 @@ abstract class AbstractSortedLinkedList implements \Countable, \IteratorAggregat
         }
 
         return null !== $current && $current->value === $value;
+    }
+
+    /**
+     * Remove the first occurrence of $value, if present.
+     *
+     * Returns true when something was removed, false when the value is not present.
+     * Maintains tail pointer correctly when the removed node was the tail.
+     */
+    final protected function removeFirst(int|string $value): bool
+    {
+        if (null === $this->head) {
+            return false;
+        }
+
+        if ($this->head->value === $value) {
+            $this->head = $this->head->next;
+            if (null === $this->head) {
+                $this->tail = null;
+            }
+            --$this->count;
+
+            return true;
+        }
+
+        $prev = $this->head;
+        while (null !== $prev->next && ($prev->next->value <=> $value) < 0) {
+            $prev = $prev->next;
+        }
+
+        if (null === $prev->next || $prev->next->value !== $value) {
+            return false;
+        }
+
+        $removed = $prev->next;
+        $prev->next = $removed->next;
+        if ($removed === $this->tail) {
+            $this->tail = $prev;
+        }
+        --$this->count;
+
+        return true;
     }
 
     /**
