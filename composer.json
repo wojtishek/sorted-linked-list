@@ -34,7 +34,8 @@
         "fix": "php-cs-fixer fix",
         "check": [
             "@analyse",
-            "@test"
+            "@test",
+            "php-cs-fixer fix --dry-run --diff"
         ]
     },
     "config": {
