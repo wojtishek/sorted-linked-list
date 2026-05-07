@@ -1,5 +1,10 @@
 # studio83/sorted-linked-list
 
+[![CI](https://github.com/wojtishek/sorted-linked-list/actions/workflows/ci.yml/badge.svg)](https://github.com/wojtishek/sorted-linked-list/actions/workflows/ci.yml)
+[![Latest Stable Version](https://poser.pugx.org/studio83/sorted-linked-list/v)](https://packagist.org/packages/studio83/sorted-linked-list)
+[![PHP Version Require](https://poser.pugx.org/studio83/sorted-linked-list/require/php)](https://packagist.org/packages/studio83/sorted-linked-list)
+[![License](https://poser.pugx.org/studio83/sorted-linked-list/license)](https://github.com/wojtishek/sorted-linked-list/blob/main/LICENSE)
+
 A small, type-safe sorted singly-linked list for PHP. A single instance holds either `int` values or `string` values — never both. The constraint is enforced at the language level by exposing two distinct concrete classes.
 
 ## Installation
