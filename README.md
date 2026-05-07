@@ -46,12 +46,23 @@ $list->toArray();      // ['apple', 'banana', 'cherry']
 
 ### Empty-list safety
 
+The idiomatic guard is `isEmpty()`:
+
+```php
+$list = new IntSortedLinkedList();
+
+if (!$list->isEmpty()) {
+    $head = $list->first();
+}
+```
+
+If pre-checking is awkward (e.g. inside a generic helper), catch the exception:
+
 ```php
 use Studio83\SortedLinkedList\Exception\EmptyListException;
 
-$list = new IntSortedLinkedList();
 try {
-    $list->first();
+    $head = $list->first();
 } catch (EmptyListException $e) {
     // handle empty case
 }
