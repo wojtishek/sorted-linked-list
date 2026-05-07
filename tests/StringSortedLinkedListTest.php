@@ -99,4 +99,28 @@ final class StringSortedLinkedListTest extends AbstractSortedLinkedListTestCase
         $list = new StringSortedLinkedList('apple', 'Banana', '1apple', 'aardvark');
         self::assertSame(['1apple', 'Banana', 'aardvark', 'apple'], $list->toArray());
     }
+
+    public function testAddRejectsIntWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new StringSortedLinkedList();
+        /* @phpstan-ignore-next-line */
+        $list->add(42);
+    }
+
+    public function testRemoveRejectsIntWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new StringSortedLinkedList('a', 'b');
+        /* @phpstan-ignore-next-line */
+        $list->remove(0);
+    }
+
+    public function testContainsRejectsIntWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new StringSortedLinkedList('a', 'b');
+        /* @phpstan-ignore-next-line */
+        $list->contains(0);
+    }
 }

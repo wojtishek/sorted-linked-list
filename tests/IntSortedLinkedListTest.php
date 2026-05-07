@@ -117,4 +117,36 @@ final class IntSortedLinkedListTest extends AbstractSortedLinkedListTestCase
         $array = $list->toArray();
         self::assertContainsOnly('int', $array);
     }
+
+    public function testAddRejectsStringWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new IntSortedLinkedList();
+        /* @phpstan-ignore-next-line - intentionally violating the type for the test */
+        $list->add('not an int');
+    }
+
+    public function testAddRejectsFloatWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new IntSortedLinkedList();
+        /* @phpstan-ignore-next-line - intentionally violating the type for the test */
+        $list->add(1.5);
+    }
+
+    public function testRemoveRejectsStringWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new IntSortedLinkedList(1, 2, 3);
+        /* @phpstan-ignore-next-line */
+        $list->remove('1');
+    }
+
+    public function testContainsRejectsStringWithTypeError(): void
+    {
+        $this->expectException(\TypeError::class);
+        $list = new IntSortedLinkedList(1, 2, 3);
+        /* @phpstan-ignore-next-line */
+        $list->contains('1');
+    }
 }
