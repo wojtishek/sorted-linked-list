@@ -94,4 +94,27 @@ final class IntSortedLinkedListTest extends AbstractSortedLinkedListTestCase
         $this->expectException(InvalidValueException::class);
         IntSortedLinkedList::fromArray([1, null, 3]);
     }
+
+    public function testFirstReturnsIntType(): void
+    {
+        $list = new IntSortedLinkedList(3, 1, 2);
+        $first = $list->first();
+        self::assertIsInt($first);
+        self::assertSame(1, $first);
+    }
+
+    public function testLastReturnsIntType(): void
+    {
+        $list = new IntSortedLinkedList(3, 1, 2);
+        $last = $list->last();
+        self::assertIsInt($last);
+        self::assertSame(3, $last);
+    }
+
+    public function testToArrayReturnsListOfInts(): void
+    {
+        $list = new IntSortedLinkedList(3, 1, 2);
+        $array = $list->toArray();
+        self::assertContainsOnly('int', $array);
+    }
 }

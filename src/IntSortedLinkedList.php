@@ -31,6 +31,33 @@ final class IntSortedLinkedList extends AbstractSortedLinkedList
         return $this->removeFirst($value);
     }
 
+    public function first(): int
+    {
+        /** @var int $value PHP's int|string return is narrowed by the int-only public API. */
+        $value = parent::first();
+
+        return $value;
+    }
+
+    public function last(): int
+    {
+        /** @var int $value */
+        $value = parent::last();
+
+        return $value;
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function toArray(): array
+    {
+        /** @var list<int> $array */
+        $array = parent::toArray();
+
+        return $array;
+    }
+
     /**
      * Build a list from an array of int values.
      *
