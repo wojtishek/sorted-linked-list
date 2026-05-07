@@ -19,17 +19,6 @@ final class IntSortedLinkedListTest extends AbstractSortedLinkedListTestCase
         return new IntSortedLinkedList();
     }
 
-    protected function fromValues(int|string ...$values): AbstractSortedLinkedList
-    {
-        $ints = [];
-        foreach ($values as $value) {
-            self::assertIsInt($value);
-            $ints[] = $value;
-        }
-
-        return new IntSortedLinkedList(...$ints);
-    }
-
     protected function ascendingSample(): array
     {
         return [1, 2, 3, 4, 5];

@@ -16,12 +16,6 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
     /** @return T */
     abstract protected function createEmpty(): AbstractSortedLinkedList;
 
-    /**
-     * Construct a list containing exactly the given values, in the order provided
-     * (the list itself will sort them).
-     */
-    abstract protected function fromValues(int|string ...$values): AbstractSortedLinkedList;
-
     /** @return list<int|string> 5 distinct values in ascending order */
     abstract protected function ascendingSample(): array;
 

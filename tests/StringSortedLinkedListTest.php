@@ -19,17 +19,6 @@ final class StringSortedLinkedListTest extends AbstractSortedLinkedListTestCase
         return new StringSortedLinkedList();
     }
 
-    protected function fromValues(int|string ...$values): AbstractSortedLinkedList
-    {
-        $strings = [];
-        foreach ($values as $value) {
-            self::assertIsString($value);
-            $strings[] = $value;
-        }
-
-        return new StringSortedLinkedList(...$strings);
-    }
-
     protected function ascendingSample(): array
     {
         return ['apple', 'banana', 'cherry', 'date', 'elderberry'];
