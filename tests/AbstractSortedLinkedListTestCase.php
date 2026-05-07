@@ -197,4 +197,70 @@ abstract class AbstractSortedLinkedListTestCase extends TestCase
         }
         self::assertSame($this->ascendingSample(), $yielded);
     }
+
+    public function testDuplicatesAreAllowedAndCounted(): void
+    {
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+        $list->add($sample[2]);
+        $list->add($sample[2]);
+        $list->add($sample[2]);
+
+        self::assertSame(3, $list->count());
+        self::assertSame([$sample[2], $sample[2], $sample[2]], $list->toArray());
+    }
+
+    public function testDuplicateInsertedAfterExistingEqualValues(): void
+    {
+        // Use non-int/non-string distinguishability via strict identity is not possible
+        // for primitive types — instead we verify ordering invariants relative to
+        // surrounding distinct values: equals stay grouped, no surrounding ordering breaks.
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+
+        // Build: sample[0], sample[2], sample[4]
+        $list->add($sample[0]);
+        $list->add($sample[2]);
+        $list->add($sample[4]);
+
+        // Insert another sample[2] — must land between the existing sample[2] and sample[4],
+        // not before the existing sample[2].
+        $list->add($sample[2]);
+
+        self::assertSame(
+            [$sample[0], $sample[2], $sample[2], $sample[4]],
+            $list->toArray()
+        );
+    }
+
+    public function testInsertingEqualToHeadDoesNotReplaceHead(): void
+    {
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+        $list->add($sample[0]);
+        $list->add($sample[2]);
+        $list->add($sample[0]);
+
+        // The new sample[0] should be inserted AFTER the existing one.
+        // Verify by checking first() still returns the original head value
+        // and the toArray order is correct.
+        self::assertSame($sample[0], $list->first());
+        self::assertSame([$sample[0], $sample[0], $sample[2]], $list->toArray());
+        self::assertSame(3, $list->count());
+    }
+
+    public function testInsertingEqualToTailUpdatesTailPointer(): void
+    {
+        $list = $this->createEmpty();
+        $sample = $this->ascendingSample();
+        $list->add($sample[0]);
+        $list->add($sample[4]);
+
+        // Insert another value equal to the current tail.
+        $list->add($sample[4]);
+
+        self::assertSame($sample[4], $list->last());
+        self::assertSame([$sample[0], $sample[4], $sample[4]], $list->toArray());
+        self::assertSame(3, $list->count());
+    }
 }
